@@ -5,17 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ensamblador Interactivo</title>
     <style>
-        /* === DISEÑO  === */
         :root {
-            --bg-color: #f0f4f8;          /* Fondo general muy claro */
-            --panel-bg: #ffffff;          /* Fondo de paneles */
-            --code-bg: #0f172a;           /* Azul muy oscuro para código */
-            --code-text: #e2e8f0;         /* Texto código claro */
-            --highlight: #3b82f6;         /* Azul brillante para selección */
-            --accent: #1e40af;            /* Azul fuerte para títulos */
-            --border: #cbd5e1;            /* Bordes suaves */
-            --context-bg: #eff6ff;        /* Fondo azul muy tenue para notas */
-            --context-border: #bfdbfe;    /* Borde azul claro para notas */
+            --bg-color: #f0f4f8;          
+            --panel-bg: #ffffff;          
+            --code-bg: #0f172a;           
+            --code-text: #e2e8f0;         
+            --highlight: #3b82f6;         
+            --accent: #1e40af;            
+            --border: #cbd5e1;           
+            --context-bg: #eff6ff;        
+            --context-border: #bfdbfe;    
         }
 
         body {
@@ -46,7 +45,6 @@
             font-size: 1.1em;
         }
 
-        /* Contenedor Principal */
         .main-container {
             display: flex;
             width: 95%;
@@ -54,12 +52,11 @@
             height: 750px;
             background-color: var(--panel-bg);
             border-radius: 16px;
-            box-shadow: 0 20px 40px rgba(30, 58, 138, 0.1); /* Sombra azulada suave */
+            box-shadow: 0 20px 40px rgba(30, 58, 138, 0.1);
             overflow: hidden;
             border: 1px solid var(--border);
         }
 
-        /* === PANEL IZQUIERDO: CÓDIGO === */
         .code-panel {
             flex: 4;
             background-color: var(--code-bg);
@@ -75,13 +72,13 @@
         .code-row {
             display: flex;
             padding: 4px 15px;
-            cursor: pointer; /* Cambiado a pointer para indicar interactividad */
+            cursor: pointer;
             transition: all 0.2s ease;
             border-left: 4px solid transparent;
         }
 
         .code-row:hover {
-            background-color: #1e293b; /* Azul un poco más claro */
+            background-color: #1e293b;
             border-left-color: var(--highlight);
             color: #ffffff;
         }
@@ -101,11 +98,10 @@
         }
 
         .comment-style { color: #94a3b8; font-style: italic; }
-        .label-style { color: #fbbf24; font-weight: bold; } /* Amarillo/Dorado */
-        .directive-style { color: #c084fc; } /* Lila */
-        .instruction-style { color: #60a5fa; font-weight: bold; } /* Azul claro */
+        .label-style { color: #fbbf24; font-weight: bold; } 
+        .directive-style { color: #c084fc; } 
+        .instruction-style { color: #60a5fa; font-weight: bold; } 
 
-        /* === PANEL DERECHO: EXPLICACIÓN === */
         .explanation-panel {
             flex: 6;
             padding: 40px;
@@ -146,15 +142,14 @@
             margin-bottom: 30px;
         }
 
-        /* CAJA DE CONTEXTO / IMPORTANCIA */
         .context-box {
             background-color: var(--context-bg);
             border: 1px solid var(--context-border);
             border-left: 5px solid var(--highlight);
             padding: 20px;
             border-radius: 8px;
-            margin-top: auto; /* Empuja hacia abajo si hay espacio */
-            display: none; /* Oculto por defecto */
+            margin-top: auto; 
+            display: none; 
             animation: fadeIn 0.3s ease-in-out;
         }
 
@@ -174,7 +169,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Placeholder inicial */
         .placeholder-container {
             text-align: center;
             margin-top: 100px;
@@ -224,9 +218,6 @@
     </div>
 
     <script>
-        // ====================================================
-        // DATOS DEL DOCUMENTO (Con campo 'context' agregado)
-        // ====================================================
         const assemblyData = [
             { 
                 code: ";****** CÓDIGO DE INICIO ******", 
@@ -404,9 +395,6 @@
             }
         ];
 
-        // ====================================================
-        // LÓGICA DE GENERACIÓN
-        // ====================================================
         const codePanel = document.getElementById('codePanel');
         const dynamicContent = document.getElementById('dynamic-content');
         const placeholder = document.getElementById('placeholder');
@@ -417,7 +405,6 @@
         const contextBox = document.getElementById('context-box');
         const contextText = document.getElementById('context-text');
 
-        // Generar filas de código
         assemblyData.forEach((item, index) => {
             const row = document.createElement('div');
             row.className = 'code-row';
@@ -430,7 +417,6 @@
             lineContent.className = 'line-content';
             lineContent.textContent = item.code;
 
-            // Coloreado sintáctico básico
             const trimmed = item.code.trim();
             if (trimmed.startsWith(';')) {
                 lineContent.classList.add('comment-style');
@@ -446,11 +432,9 @@
             row.appendChild(lineContent);
             codePanel.appendChild(row);
 
-            // Eventos Mouse
             row.addEventListener('mouseenter', () => mostrarInfo(index));
         });
 
-        // Restaurar vista al salir del panel
         codePanel.addEventListener('mouseleave', () => {
             dynamicContent.style.display = 'none';
             placeholder.style.display = 'block';
@@ -459,33 +443,28 @@
         function mostrarInfo(index) {
             const data = assemblyData[index];
             
-            // Ocultar placeholder, mostrar contenido
             placeholder.style.display = 'none';
             dynamicContent.style.display = 'block';
 
-            // Llenar datos básicos
             expType.textContent = data.type;
             
-            // Determinar título (limpiar código)
             let title = data.code.trim();
             if (title.startsWith(';')) title = "Comentario";
-            else if (title.includes(' ')) title = title.split(' ')[0].toUpperCase(); // Coge la primera palabra (MOV, ADD...)
-            else title = title.replace(':', '').toUpperCase(); // Etiquetas
+            else if (title.includes(' ')) title = title.split(' ')[0].toUpperCase(); 
+            else title = title.replace(':', '').toUpperCase(); 
 
             expTitle.textContent = title === "Comentario" ? "Comentario" : `Elemento: ${title}`;
             expContent.innerHTML = data.explanation;
 
-            // Lógica de Contexto / Relación
             if (data.context) {
                 contextBox.style.display = 'block';
                 contextText.textContent = data.context;
                 
-                // Cambiar color del borde si es crítico
                 if (data.context.includes("CRÍTICO") || data.context.includes("VINCULACIÓN")) {
-                    contextBox.style.borderLeftColor = "#ef4444"; // Rojo si es crítico
+                    contextBox.style.borderLeftColor = "#ef4444"; 
                     contextBox.querySelector('h3').style.color = "#ef4444";
                 } else {
-                    contextBox.style.borderLeftColor = "#3b82f6"; // Azul normal
+                    contextBox.style.borderLeftColor = "#3b82f6"; 
                     contextBox.querySelector('h3').style.color = "#1e40af";
                 }
             } else {
